@@ -247,7 +247,7 @@ absolute_errors <- abs(predictions - boston_housing_test$medv)
 mae <- mean(absolute_errors)
 print(paste("MAE =", sprintf(mae, fmt = "%#.4f")))
 
-#you are here
+#you are here!
 
 ### 1.b. Linear Regression using Ordinary Least Squares with caret ----
 #### Load and split the dataset ----
@@ -453,16 +453,16 @@ confusion_matrix <-
                          pima_indians_diabetes_test[, 1:9]$diabetes)
 print(confusion_matrix)
 
-fourfoldplot(as.table(confusion_matrix), color = c("grey", "lightblue"),
+fourfoldplot(as.table(confusion_matrix), color = c("blue", "skyblue"),
              main = "Confusion Matrix")
 
 ## 4. Regularized Linear Regression ----
 # The glmnet() function is in the glmnet package and can be used for
 # both classification and regression problems.
 # It can also be configured to perform three important types of regularization:
-##    1. lasso,
-##    2. ridge and
-##    3. elastic net
+##    1. lasso, ("alpha: 1")
+##    2. ridge and ("alpha: 0.5")
+##    3. elastic net ("alpha: 0")
 # by configuring the alpha parameter to 1, 0 or in [0,1] respectively.
 
 ### 4.a. Regularized Linear Regression Classification Problem without CARET ----
@@ -1079,7 +1079,7 @@ confusion_matrix <-
                          pima_indians_diabetes_test[, 1:9]$diabetes)
 print(confusion_matrix)
 
-fourfoldplot(as.table(confusion_matrix), color = c("grey", "lightblue"),
+fourfoldplot(as.table(confusion_matrix), color = c("purple", "skyblue"),
              main = "Confusion Matrix")
 
 ### 4.b. SVM Classifier for a regression problem without CARET ----
