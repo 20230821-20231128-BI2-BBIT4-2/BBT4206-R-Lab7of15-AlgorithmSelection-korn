@@ -247,6 +247,8 @@ absolute_errors <- abs(predictions - boston_housing_test$medv)
 mae <- mean(absolute_errors)
 print(paste("MAE =", sprintf(mae, fmt = "%#.4f")))
 
+#you are here
+
 ### 1.b. Linear Regression using Ordinary Least Squares with caret ----
 #### Load and split the dataset ----
 data(BostonHousing)
