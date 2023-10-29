@@ -1,3 +1,74 @@
+---
+title: "Business Intelligence Project"
+author: "korn"
+date: "23/10/23"
+output:
+  github_document: 
+    toc: yes
+    toc_depth: 4
+    fig_width: 6
+    fig_height: 4
+    df_print: default
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+# Student Details
+
++-------------------------------------+--------------------------------+
+| **Student ID Numbers and Names of   | 1.  134644 - C - Sebastian     |
+| Group Members**                     |     Muramara                   |
+|                                     |                                |
+|                                     | 2.  136675 - C - Bernard       |
+|                                     |     Otieno                     |
+|                                     |                                |
+|                                     | 3.  131589 - C - Agnes Anyango |
+|                                     |                                |
+|                                     | 4.  131582 - C - Njeri Njuguna |
+|                                     |                                |
+|                                     | 5.  136009 - C- Sera Ndabari   |
++-------------------------------------+--------------------------------+
+| **GitHub Classroom Group Name**     | Korn                           |
++-------------------------------------+--------------------------------+
+| **Course Code**                     | BBT4206                        |
++-------------------------------------+--------------------------------+
+| **Course Name**                     | Business Intelligence II       |
++-------------------------------------+--------------------------------+
+| **Program**                         | Bachelor of Business           |
+|                                     | Information Technology         |
++-------------------------------------+--------------------------------+
+| **Semester Duration**               | 21^st^ August 2023 to 28^th^   |
+|                                     | November 2023                  |
++-------------------------------------+--------------------------------+
+
+# Setup Chunk
+
+**Note:** the following KnitR options have been set as the global
+defaults: <BR>
+`knitr::opts_chunk$set(echo = TRUE, warning = FALSE, eval = TRUE, collapse = FALSE, tidy = TRUE)`.
+
+More KnitR options are documented here
+<https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html> and
+here <https://yihui.org/knitr/options/>.
+
+```{r setup, include=FALSE}
+library(formatR)
+knitr::opts_chunk$set(
+  warning = FALSE,
+  collapse = FALSE
+)
+
+```
+
+# LAB 7
+
+## CLASSIFICATION
+
+### Load required Packages
+
+```{r Packages}
 
 if (require("languageserver")) {
   require("languageserver")
@@ -6,27 +77,6 @@ if (require("languageserver")) {
                    repos = "https://cloud.r-project.org")
 }
 
-# Introduction ----
-# There are hundreds of algorithms to choose from.
-# A list of the Typeification and regression algorithms offered by
-# the caret package can be found here:
-# http://topepo.github.io/caret/available-models.html
-
-# The goal of predictive modelling is to use the most appropriate algorithm to
-# design an accurate model that represents the dataset. Selecting the most
-# appropriate algorithm is a process that involves trial-and-error.
-
-# If the most appropriate algorithm was known beforehand, then it would not be
-# necessary to use Machine Learning. The trial-and-error approach to selecting
-# the most appropriate algorithm involves evaluating a diverse set of
-# algorithms on the dataset, and identifying the algorithms that create
-# accurate models and the ones that do not.
-
-# Once you have a shortlist of the top algorithms, you can then improve their
-# results further by either tuning the algorithm parameters or by combining the
-# predictions of multiple models using ensemble methods.
-
-# STEP 1. Install and Load the Required Packages ----
 ## stats ----
 if (require("stats")) {
   require("stats")
@@ -91,7 +141,76 @@ if (require("rpart")) {
                    repos = "https://cloud.r-project.org")
 }
 
-### 1.a. Decision tree for a classification problem without caret ----
+```
+
+#Dataset used for classification
+
+## Dataset Description
+
+A data frame with 214 observation containing examples of the chemical
+analysis of 7 different types of glass. The problem is to forecast the
+type of class on basis of the chemical analysis. The study of
+classification of types of glass was motivated by criminological
+investigation. At the scene of the crime, the glass left can be used as
+evidence (if it is correctlyidentified!).
+
+#Usage
+
+data(Glass)
+
+#Format
+
+A data frame with 214 observations on 10 variables:
+
+[,1] RI refractive index
+
+[,2] Na Sodium
+
+[,3] Mg Magnesium
+
+[,4] Al Aluminum
+
+[,5] Si Silicon
+
+[,6] K Potassium
+
+[,7] Ca Calcium
+
+[,8] Ba Barium
+
+[,9] Fe Iron
+
+[,10] Type Type of glass (class attribute)
+
+#Source
+
+• Creator: B. German, Central Research Establishment, Home Office
+Forensic Science Service, Aldermaston, Reading, Berkshire RG7 4PN
+
+• Donor: Vina Spiehler, Ph.D., DABFT, Diagnostic Products Corporation
+These data have been taken from the UCI Repository Of Machine Learning
+Databases at 10 HouseVotes84
+
+• <ftp://ftp.ics.uci.edu/pub/machine-learning-databases>
+
+• <http://www.ics.uci.edu/~mlearn/MLRepository.html> and were converted
+to R format by Friedrich Leisch.
+
+#References
+
+Newman, D.J. & Hettich, S. & Blake, C.L. & Merz, C.J. (1998). UCI
+Repository of machine learning databases
+[<http://www.ics.uci.edu/~mlearn/MLRepository.html>]. Irvine, CA:
+University of California, Department of Information and Computer
+Science.
+
+#Examples
+
+data(Glass) summary(Glass)
+
+## 1.a.Decision tree for a classification problem without caret
+
+```{r CART}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -120,10 +239,11 @@ confusion_matrix <-
   caret::confusionMatrix(predictions,
                         Glass_test[, 1:10]$Type)
 print(confusion_matrix)
+```
 
+## 1.b. Decision tree for a classification problem with caret
 
-
-### 1.b. Decision tree for a classification problem with caret ----
+```{r CART with caret}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -158,7 +278,11 @@ confusion_matrix <-
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
 
-### 2.a. Naïve Bayes Classifier for a Classification Problem without CARET ----
+```
+
+## 2.a. Naïve Bayes Classifier for a Classification Problem without CARET
+
+```{r nb}
 # We use the naiveBayes function inside the e1071 package
 #### Load and split the dataset ----
 data(Glass)
@@ -186,10 +310,11 @@ confusion_matrix <-
   caret::confusionMatrix(predictions,
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
+```
 
+## 2.b. Naïve Bayes Classifier for a Classification Problem with CARET
 
-
-### 2.b. Naïve Bayes Classifier for a Classification Problem with CARET ----
+```{r nb with caret}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -224,7 +349,12 @@ confusion_matrix <-
                          Glass_train_imputed[, 1:10]$Type)
 print(confusion_matrix)
 
-### 3.a. kNN for a classification problem without CARET's train function ----
+
+```
+
+## 3.a. kNN for a classification problem without CARET's train function
+
+```{r kNN}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -256,7 +386,11 @@ confusion_matrix <-
 print(confusion_matrix)
 
 
-### 3.c. kNN for a classification problem with CARET's train function ----
+```
+
+## 3.b. kNN for a classification problem with CARET's train function
+
+```{r kNN with caret}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -289,9 +423,12 @@ confusion_matrix <-
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
 
-## 4.a. SVM Classifier for a classification problem with CARET ----
-  
-  #### Load and split the dataset ----
+```
+
+## 4.a. SVM Classifier for a classification problem with CARET
+
+```{r SVM with caret}
+ #### Load and split the dataset ----
 data(Glass)
 
 # Define a 70:30 train:test data split of the dataset.
@@ -322,7 +459,11 @@ confusion_matrix <-
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
 
-### 4.b. SVM Classifier for a classification problem without CARET ----
+```
+
+## 4.b. SVM Classifier for a classification problem without CARET
+
+```{r SVM}
 #### Load and split the dataset ----
 data(Glass)
 
@@ -351,5 +492,4 @@ confusion_matrix <-
   caret::confusionMatrix(predictions,
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
-
-
+```
