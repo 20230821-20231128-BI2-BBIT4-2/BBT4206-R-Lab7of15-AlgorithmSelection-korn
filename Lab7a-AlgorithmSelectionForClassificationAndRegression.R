@@ -263,7 +263,9 @@ set.seed(7)
 train_control <- trainControl(method = "cv", number = 5)
 boston_housing_caret_model_lm <- train(medv ~ ., data = boston_housing_train,
                                        method = "lm", metric = "RMSE",
-                                       preProcess = c("center", "scale"),
+                                       preProcess = c("center", "scale"),##data transformation
+                                       ## center =value- mean
+                                       ## scale = value - s.d
                                        trControl = train_control)
 
 #### Display the model's details ----
@@ -295,6 +297,7 @@ print(paste("SST =", sprintf(sst, fmt = "%#.4f")))
 # The closer the R squared value is to 1, the better the model.
 r_squared <- 1 - (ssr / sst)
 print(paste("R Squared =", sprintf(r_squared, fmt = "%#.4f")))
+
 
 ##### MAE ----
 # MAE is expressed in the same units as the target variable, making it easy to
