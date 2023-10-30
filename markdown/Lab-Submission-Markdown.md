@@ -6,8 +6,8 @@ korn
 - [Student Details](#student-details)
 - [Setup Chunk](#setup-chunk)
 - [LAB 7](#lab-7)
-  - [CLASSIFICATION](#classification)
-    - [Load required Packages](#load-required-packages)
+- [CLASSIFICATION](#classification)
+  - [Load required Packages](#load-required-packages)
   - [Dataset Description](#dataset-description)
   - [1.a.Decision tree for a classification problem without
     caret](#1adecision-tree-for-a-classification-problem-without-caret)
@@ -25,14 +25,14 @@ korn
     CARET](#4a-svm-classifier-for-a-classification-problem-with-caret)
   - [4.b. SVM Classifier for a classification problem without
     CARET](#4b-svm-classifier-for-a-classification-problem-without-caret)
-- [A. Linear Algorithms](#a-linear-algorithms)
+- [Linear Regression Algorithms](#linear-regression-algorithms)
 
 # Student Details
 
-<table style="width:99%;">
+<table style="width:96%;">
 <colgroup>
-<col style="width: 52%" />
-<col style="width: 45%" />
+<col style="width: 51%" />
+<col style="width: 44%" />
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -80,7 +80,7 @@ here <https://yihui.org/knitr/options/>.
 
 # LAB 7
 
-## CLASSIFICATION
+# CLASSIFICATION
 
 ### Load required Packages
 
@@ -293,16 +293,18 @@ print(Type_model_rpart)
     ##       * denotes terminal node
     ## 
     ##  1) root 174 113 2 (0.32 0.35 0.08 0.063 0.046 0.14)  
-    ##    2) Ba< 0.335 150  89 2 (0.37 0.41 0.093 0.067 0.053 0.013)  
-    ##      4) Al< 1.42 90  39 1 (0.57 0.27 0.11 0.011 0.033 0.011)  
-    ##        8) Ca< 10.525 81  30 1 (0.63 0.21 0.12 0 0.025 0.012)  
-    ##         16) Mg< 3.865 73  23 1 (0.68 0.15 0.12 0 0.027 0.014) *
-    ##         17) Mg>=3.865 8   2 2 (0.12 0.75 0.12 0 0 0) *
-    ##        9) Ca>=10.525 9   2 2 (0 0.78 0 0.11 0.11 0) *
-    ##      5) Al>=1.42 60  23 2 (0.067 0.62 0.067 0.15 0.083 0.017)  
-    ##       10) Mg>=2.26 43   9 2 (0.093 0.79 0.093 0 0.023 0) *
+    ##    2) Ba< 0.335 151  90 2 (0.36 0.4 0.093 0.066 0.053 0.02)  
+    ##      4) Al< 1.42 94  42 1 (0.55 0.27 0.12 0.011 0.032 0.021)  
+    ##        8) Mg>=3.255 78  27 1 (0.65 0.19 0.14 0 0 0.013)  
+    ##         16) RI>=1.51707 68  19 1 (0.72 0.19 0.074 0 0 0.015)  
+    ##           32) Mg< 3.865 61  13 1 (0.79 0.13 0.066 0 0 0.016) *
+    ##           33) Mg>=3.865 7   2 2 (0.14 0.71 0.14 0 0 0) *
+    ##         17) RI< 1.51707 10   4 3 (0.2 0.2 0.6 0 0 0) *
+    ##        9) Mg< 3.255 16   6 2 (0.062 0.62 0 0.063 0.19 0.062) *
+    ##      5) Al>=1.42 57  21 2 (0.053 0.63 0.053 0.16 0.088 0.018)  
+    ##       10) Mg>=2.26 40   7 2 (0.075 0.82 0.075 0 0.025 0) *
     ##       11) Mg< 2.26 17   8 5 (0 0.18 0 0.53 0.24 0.059) *
-    ##    3) Ba>=0.335 24   2 7 (0.042 0 0 0.042 0 0.92) *
+    ##    3) Ba>=0.335 23   2 7 (0.043 0 0 0.043 0 0.91) *
 
 ``` r
 #### Make predictions ----
@@ -316,12 +318,12 @@ table(predictions,Glass_test$Type)
 
     ##            
     ## predictions  1  2  3  5  6  7
-    ##           1 12  4  3  0  0  1
-    ##           2  2 10  0  0  0  0
-    ##           3  0  0  0  0  0  0
+    ##           1  7  1  1  0  0  0
+    ##           2  6 12  1  0  0  0
+    ##           3  1  1  1  0  0  0
     ##           5  0  0  0  2  1  0
     ##           6  0  0  0  0  0  0
-    ##           7  0  1  0  0  0  4
+    ##           7  0  1  0  0  0  5
 
 ``` r
 confusion_matrix <-
@@ -334,35 +336,35 @@ print(confusion_matrix)
     ## 
     ##           Reference
     ## Prediction  1  2  3  5  6  7
-    ##          1 12  4  3  0  0  1
-    ##          2  2 10  0  0  0  0
-    ##          3  0  0  0  0  0  0
+    ##          1  7  1  1  0  0  0
+    ##          2  6 12  1  0  0  0
+    ##          3  1  1  1  0  0  0
     ##          5  0  0  0  2  1  0
     ##          6  0  0  0  0  0  0
-    ##          7  0  1  0  0  0  4
+    ##          7  0  1  0  0  0  5
     ## 
     ## Overall Statistics
     ##                                           
-    ##                Accuracy : 0.7             
-    ##                  95% CI : (0.5347, 0.8344)
+    ##                Accuracy : 0.675           
+    ##                  95% CI : (0.5087, 0.8143)
     ##     No Information Rate : 0.375           
-    ##     P-Value [Acc > NIR] : 3.088e-05       
+    ##     P-Value [Acc > NIR] : 0.0001152       
     ##                                           
-    ##                   Kappa : 0.5672          
+    ##                   Kappa : 0.5455          
     ##                                           
     ##  Mcnemar's Test P-Value : NA              
     ## 
     ## Statistics by Class:
     ## 
     ##                      Class: 1 Class: 2 Class: 3 Class: 5 Class: 6 Class: 7
-    ## Sensitivity            0.8571   0.6667    0.000   1.0000    0.000   0.8000
-    ## Specificity            0.6923   0.9200    1.000   0.9737    1.000   0.9714
-    ## Pos Pred Value         0.6000   0.8333      NaN   0.6667      NaN   0.8000
-    ## Neg Pred Value         0.9000   0.8214    0.925   1.0000    0.975   0.9714
-    ## Prevalence             0.3500   0.3750    0.075   0.0500    0.025   0.1250
-    ## Detection Rate         0.3000   0.2500    0.000   0.0500    0.000   0.1000
-    ## Detection Prevalence   0.5000   0.3000    0.000   0.0750    0.000   0.1250
-    ## Balanced Accuracy      0.7747   0.7933    0.500   0.9868    0.500   0.8857
+    ## Sensitivity            0.5000   0.8000   0.3333   1.0000    0.000   1.0000
+    ## Specificity            0.9231   0.7200   0.9459   0.9737    1.000   0.9714
+    ## Pos Pred Value         0.7778   0.6316   0.3333   0.6667      NaN   0.8333
+    ## Neg Pred Value         0.7742   0.8571   0.9459   1.0000    0.975   1.0000
+    ## Prevalence             0.3500   0.3750   0.0750   0.0500    0.025   0.1250
+    ## Detection Rate         0.1750   0.3000   0.0250   0.0500    0.000   0.1250
+    ## Detection Prevalence   0.2250   0.4750   0.0750   0.0750    0.000   0.1500
+    ## Balanced Accuracy      0.7115   0.7600   0.6396   0.9868    0.500   0.9857
 
 ## 1.b. Decision tree for a classification problem with caret
 
@@ -420,12 +422,12 @@ table(predictions, Glass_test$Type)
 
     ##            
     ## predictions  1  2  3  5  6  7
-    ##           1 18  6  3  0  1  0
-    ##           2  2 16  2  3  1  0
+    ##           1 19  6  3  0  0  1
+    ##           2  1 15  2  3  2  0
     ##           3  0  0  0  0  0  0
     ##           5  0  0  0  0  0  0
     ##           6  0  0  0  0  0  0
-    ##           7  1  0  0  0  0  8
+    ##           7  1  1  0  0  0  7
 
 ``` r
 confusion_matrix <-
@@ -438,35 +440,35 @@ print(confusion_matrix)
     ## 
     ##           Reference
     ## Prediction  1  2  3  5  6  7
-    ##          1 18  6  3  0  1  0
-    ##          2  2 16  2  3  1  0
+    ##          1 19  6  3  0  0  1
+    ##          2  1 15  2  3  2  0
     ##          3  0  0  0  0  0  0
     ##          5  0  0  0  0  0  0
     ##          6  0  0  0  0  0  0
-    ##          7  1  0  0  0  0  8
+    ##          7  1  1  0  0  0  7
     ## 
     ## Overall Statistics
-    ##                                          
-    ##                Accuracy : 0.6885         
-    ##                  95% CI : (0.5571, 0.801)
-    ##     No Information Rate : 0.3607         
-    ##     P-Value [Acc > NIR] : 1.999e-07      
-    ##                                          
-    ##                   Kappa : 0.5424         
-    ##                                          
-    ##  Mcnemar's Test P-Value : NA             
+    ##                                         
+    ##                Accuracy : 0.6721        
+    ##                  95% CI : (0.54, 0.7869)
+    ##     No Information Rate : 0.3607        
+    ##     P-Value [Acc > NIR] : 7.628e-07     
+    ##                                         
+    ##                   Kappa : 0.5185        
+    ##                                         
+    ##  Mcnemar's Test P-Value : NA            
     ## 
     ## Statistics by Class:
     ## 
     ##                      Class: 1 Class: 2 Class: 3 Class: 5 Class: 6 Class: 7
-    ## Sensitivity            0.8571   0.7273  0.00000  0.00000  0.00000   1.0000
-    ## Specificity            0.7500   0.7949  1.00000  1.00000  1.00000   0.9811
-    ## Pos Pred Value         0.6429   0.6667      NaN      NaN      NaN   0.8889
-    ## Neg Pred Value         0.9091   0.8378  0.91803  0.95082  0.96721   1.0000
+    ## Sensitivity            0.9048   0.6818  0.00000  0.00000  0.00000   0.8750
+    ## Specificity            0.7500   0.7949  1.00000  1.00000  1.00000   0.9623
+    ## Pos Pred Value         0.6552   0.6522      NaN      NaN      NaN   0.7778
+    ## Neg Pred Value         0.9375   0.8158  0.91803  0.95082  0.96721   0.9808
     ## Prevalence             0.3443   0.3607  0.08197  0.04918  0.03279   0.1311
-    ## Detection Rate         0.2951   0.2623  0.00000  0.00000  0.00000   0.1311
-    ## Detection Prevalence   0.4590   0.3934  0.00000  0.00000  0.00000   0.1475
-    ## Balanced Accuracy      0.8036   0.7611  0.50000  0.50000  0.50000   0.9906
+    ## Detection Rate         0.3115   0.2459  0.00000  0.00000  0.00000   0.1148
+    ## Detection Prevalence   0.4754   0.3770  0.00000  0.00000  0.00000   0.1475
+    ## Balanced Accuracy      0.8274   0.7383  0.50000  0.50000  0.50000   0.9186
 
 ## 2.a. Naïve Bayes Classifier for a Classification Problem without CARET
 
@@ -1099,7 +1101,7 @@ print(confusion_matrix)
     ## Detection Prevalence   0.3934   0.4098  0.00000  0.06557  0.01639   0.1148
     ## Balanced Accuracy      0.8899   0.8549  0.50000  0.99138  0.75000   0.9375
 
-# A. Linear Algorithms
+# Linear Regression Algorithms
 
 ``` r
 # A. Linear Algorithms ----

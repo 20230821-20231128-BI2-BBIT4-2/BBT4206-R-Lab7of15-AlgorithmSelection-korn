@@ -17,31 +17,33 @@ editor_options:
 
 # Student Details
 
-+-------------------------------------+--------------------------------+
-| **Student ID Numbers and Names of   | 1.  134644 - C - Sebastian     |
-| Group Members**                     |     Muramara                   |
-|                                     |                                |
-|                                     | 2.  136675 - C - Bernard       |
-|                                     |     Otieno                     |
-|                                     |                                |
-|                                     | 3.  131589 - C - Agnes Anyango |
-|                                     |                                |
-|                                     | 4.  131582 - C - Njeri Njuguna |
-|                                     |                                |
-|                                     | 5.  136009 - C- Sera Ndabari   |
-+-------------------------------------+--------------------------------+
-| **GitHub Classroom Group Name**     | Korn                           |
-+-------------------------------------+--------------------------------+
-| **Course Code**                     | BBT4206                        |
-+-------------------------------------+--------------------------------+
-| **Course Name**                     | Business Intelligence II       |
-+-------------------------------------+--------------------------------+
-| **Program**                         | Bachelor of Business           |
-|                                     | Information Technology         |
-+-------------------------------------+--------------------------------+
-| **Semester Duration**               | 21^st^ August 2023 to 28^th^   |
-|                                     | November 2023                  |
-+-------------------------------------+--------------------------------+
++------------------------------------+-------------------------------+
+| **Student ID Numbers and Names of  | 1.  134644 - C - Sebastian    |
+| Group Members**                    |     Muramara                  |
+|                                    |                               |
+|                                    | 2.  136675 - C - Bernard      |
+|                                    |     Otieno                    |
+|                                    |                               |
+|                                    | 3.  131589 - C - Agnes        |
+|                                    |     Anyango                   |
+|                                    |                               |
+|                                    | 4.  131582 - C - Njeri        |
+|                                    |     Njuguna                   |
+|                                    |                               |
+|                                    | 5.  136009 - C- Sera Ndabari  |
++------------------------------------+-------------------------------+
+| **GitHub Classroom Group Name**    | Korn                          |
++------------------------------------+-------------------------------+
+| **Course Code**                    | BBT4206                       |
++------------------------------------+-------------------------------+
+| **Course Name**                    | Business Intelligence II      |
++------------------------------------+-------------------------------+
+| **Program**                        | Bachelor of Business          |
+|                                    | Information Technology        |
++------------------------------------+-------------------------------+
+| **Semester Duration**              | 21^st^ August 2023 to 28^th^  |
+|                                    | November 2023                 |
++------------------------------------+-------------------------------+
 
 # Setup Chunk
 
@@ -64,7 +66,7 @@ knitr::opts_chunk$set(
 
 # LAB 7
 
-## CLASSIFICATION
+# CLASSIFICATION
 
 ### Load required Packages
 
@@ -494,7 +496,8 @@ confusion_matrix <-
 print(confusion_matrix)
 ```
 
-# A. Linear Algorithms
+# Linear Regression Algorithms
+
 ```{r A. Linear Algorithms}
 # A. Linear Algorithms ----
 ## 1. Linear Regression ----
@@ -664,5 +667,4 @@ table(predictions, data_test$charges)
 
 ```
 
-```
-
+\`\`\`
