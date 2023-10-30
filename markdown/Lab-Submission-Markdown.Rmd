@@ -493,7 +493,9 @@ confusion_matrix <-
                          Glass_test[, 1:10]$Type)
 print(confusion_matrix)
 ```
-```{r}
+
+# A. Linear Algorithms
+```{r A. Linear Algorithms}
 # A. Linear Algorithms ----
 ## 1. Linear Regression ----
 ### 1.a. Linear Regression using Ordinary Least Squares without caret ----
