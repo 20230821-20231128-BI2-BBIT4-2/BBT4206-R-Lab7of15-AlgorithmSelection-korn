@@ -632,7 +632,7 @@ summary(tr_stock_code)
 
 # STEP 2. Basic EDA ----
 # Create an item frequency plot for the top 10 items
-itemFrequencyPlot(tr_stock_code, topN = 10, type = "absolute",
+itemFrequencyPlot(tr, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
                   horiz = TRUE,
@@ -733,6 +733,7 @@ roses_regency_teacup_and_saucer_association_rules <- # nolint
   apriori(tr, parameter = list(supp = 0.01, conf = 0.8),
           appearance = list(default = "lhs",
                             rhs = "ROSES REGENCY TEACUP AND SAUCER"))
+
 inspect(head(roses_regency_teacup_and_saucer_association_rules))
 
 # Which product(s) are bought if a customer purchases
