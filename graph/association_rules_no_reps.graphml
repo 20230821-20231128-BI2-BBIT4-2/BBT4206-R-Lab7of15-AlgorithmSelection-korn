@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+         http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<!-- Created by igraph -->
+  <key id="v_name" for="node" attr.name="name" attr.type="string"/>
+  <key id="v_label" for="node" attr.name="label" attr.type="string"/>
+  <key id="v_index" for="node" attr.name="index" attr.type="double"/>
+  <key id="v_type" for="node" attr.name="type" attr.type="double"/>
+  <key id="v_support" for="node" attr.name="support" attr.type="double"/>
+  <key id="v_confidence" for="node" attr.name="confidence" attr.type="double"/>
+  <key id="v_coverage" for="node" attr.name="coverage" attr.type="double"/>
+  <key id="v_lift" for="node" attr.name="lift" attr.type="double"/>
+  <key id="v_count" for="node" attr.name="count" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="n0">
+      <data key="v_name">6021</data>
+      <data key="v_label">PINK REGENCY TEACUP AND SAUCER</data>
+      <data key="v_index">6021</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n1">
+      <data key="v_name">6850</data>
+      <data key="v_label">REGENCY CAKESTAND 3 TIER</data>
+      <data key="v_index">6850</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n2">
+      <data key="v_name">6855</data>
+      <data key="v_label">REGENCY TEA PLATE GREEN</data>
+      <data key="v_index">6855</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n3">
+      <data key="v_name">6856</data>
+      <data key="v_label">REGENCY TEA PLATE PINK</data>
+      <data key="v_index">6856</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n4">
+      <data key="v_name">7156</data>
+      <data key="v_label">ROSES REGENCY TEACUP AND SAUCER</data>
+      <data key="v_index">7156</data>
+      <data key="v_type">1</data>
+      <data key="v_count">-2147483648</data>
+    </node>
+    <node id="n5">
+      <data key="v_name">assoc1</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">1</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0100470180648354</data>
+      <data key="v_confidence">0.898230088495575</data>
+      <data key="v_coverage">0.0111853501608513</data>
+      <data key="v_lift">63.6797857475547</data>
+      <data key="v_count">203</data>
+    </node>
+    <node id="n6">
+      <data key="v_name">assoc2</data>
+      <data key="v_label">NA</data>
+      <data key="v_index">2</data>
+      <data key="v_type">2</data>
+      <data key="v_support">0.0128186092551349</data>
+      <data key="v_confidence">0.851973684210526</data>
+      <data key="v_coverage">0.0150457807473398</data>
+      <data key="v_lift">20.2996795866435</data>
+      <data key="v_count">259</data>
+    </node>
+    <edge source="n3" target="n5">
+    </edge>
+    <edge source="n0" target="n6">
+    </edge>
+    <edge source="n1" target="n6">
+    </edge>
+    <edge source="n5" target="n2">
+    </edge>
+    <edge source="n6" target="n4">
+    </edge>
+  </graph>
+</graphml>
