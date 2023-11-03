@@ -652,7 +652,7 @@ print(transactions)
 summary(transactions)
 
 # Step Three: Basic EDA ----
-## Create an item frequency plot for the top 10 items
+## Create an item frequency plot  for the top 10 items
 itemFrequencyPlot(transactions, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
