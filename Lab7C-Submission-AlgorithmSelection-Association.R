@@ -6,7 +6,7 @@ if (require("languageserver")) {
                    repos = "https://cloud.r-project.org")
 }
 
-# STEP 1. Install and Load the Required Packages ----
+# Install and Load the Required Packages ----
 ## arules ----
 if (require("arules")) {
   require("arules")
@@ -193,7 +193,7 @@ mba_removed_vars_obs <- mba_removed_vars_obs %>% filter(complete.cases(.))
 dim(mba_removed_vars_obs)
 
 # We then remove the duplicate variables that we do not need
-# (InvoiceNo and InvoiceDate) and we also remove all commas to make it easier
+# (BillNo and Date) and we also remove all commas to make it easier
 # to identify individual products (some products have commas in their names).
 mba_removed_vars_obs <-
   mba_removed_vars_obs %>%
@@ -260,7 +260,7 @@ tr <-
 print(tr)
 summary(tr)
 
-# STEP 2. Basic EDA ----
+# Basic EDA ----
 # Create an item frequency plot for the top 10 items
 itemFrequencyPlot(tr, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
@@ -273,8 +273,7 @@ association_rules <- apriori(tr,
                                                         confidence = 0.8,
                                                         maxlen = 10))
 
-# STEP 3. Print the association rules ----
-
+# Print the association rules ----
 # Threshold values of support = 0.01, confidence = 0.8, and
 # maxlen = 10 results in a total of 14 rules when using the
 # product name to identify the products.
@@ -299,25 +298,7 @@ inspect(association_rules_no_reps)
 write(association_rules_no_reps,
       file = "rules/association_rules.csv")
 
-# STEP 4. Find specific rules ----
-# Which product(s), if bought, result in a customer purchasing
-# "ROSES REGENCY TEACUP AND SAUCER"?
-roses_regency_teacup_and_saucer_association_rules <- # nolint
-  apriori(tr, parameter = list(supp = 0.01, conf = 0.8),
-          appearance = list(default = "lhs",
-                            rhs = "ROSES REGENCY TEACUP AND SAUCER"))
-
-inspect(head(roses_regency_teacup_and_saucer_association_rules))
-
-# Which product(s) are bought if a customer purchases
-# "STRAWBERRY CHARLOTTE BAG,WOODLAND CHARLOTTE BAG"?
-strawberry_charlotte_bag_association_rules <- # nolint
-  apriori(tr, parameter = list(supp = 0.01, conf = 0.8),
-          appearance = list(lhs = c("STRAWBERRY CHARLOTTE BAG", "WOODLAND CHARLOTTE BAG"), # nolint
-                            default = "rhs"))
-inspect(head(strawberry_charlotte_bag_association_rules))
-
-# STEP 5. Visualize the rules ----
+# Visualize the rules ----
 # Filter rules with confidence greater than 0.85 or 85%
 rules_to_plot <-
   association_rules_no_reps[quality(association_rules_no_reps)$confidence > 0.85] # nolint
@@ -337,3 +318,4 @@ rules_to_plot_by_lift <- head(rules_to_plot, n = 20, by = "lift")
 plot(rules_to_plot_by_lift, method = "paracoord")
 
 plot(top_10_rules_to_plot, method = "grouped")
+
