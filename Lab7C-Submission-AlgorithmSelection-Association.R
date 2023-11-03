@@ -1,4 +1,5 @@
 # Install and Load the Required Packages ----
+renv::restore()
 
 ##languageserver
 if (require("languageserver")) {
@@ -139,6 +140,8 @@ itemFrequencyPlot(transactions, topN = 10, type = "absolute",
 
 association_rules <- apriori(transactions, 
                              parameter = list(supp = 0.005, conf = 0.8, maxlen = 10))
+
+
 
 
 # Print the association rules ----
