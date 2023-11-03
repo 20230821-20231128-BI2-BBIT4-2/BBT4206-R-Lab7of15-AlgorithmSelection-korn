@@ -508,7 +508,7 @@ print(confusion_matrix)
 
 ### Load and split the dataset ----
 library(readr)
-insurance <- read_csv("../data/insurance.csv")
+insurance <- read_csv("data/insurance.csv")
 View(insurance)
 
 
