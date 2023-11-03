@@ -1,4 +1,6 @@
+# Install and Load the Required Packages ----
 
+##languageserver
 if (require("languageserver")) {
   require("languageserver")
 } else {
@@ -6,7 +8,6 @@ if (require("languageserver")) {
                    repos = "https://cloud.r-project.org")
 }
 
-# Install and Load the Required Packages ----
 ## arules ----
 if (require("arules")) {
   require("arules")
@@ -96,202 +97,76 @@ if (require("RColorBrewer")) {
 }
 
 ## The dataset ----
-# We will use the Market Basket Analysis dataset available on Kaggle
-# here: https://www.kaggle.com/datasets/aslanahmedov/market-basket-analysis/data
+# We will use the Groceries dataset for Market Basket Analysis available on Kaggle
+# here: https://www.kaggle.com/datasets/heeraldedhia/groceries-dataset/data
 
 # Abstract:
-# This is a dataset containing retail data with details concerning all the transactions that have happened over a period of time.
+# The dataset has 38765 rows of the purchase orders of people from the grocery stores. These orders can be analysed and association rules can be generated using Market Basket Analysis by algorithms like Apriori Algorithm.
 
-### Loading the Dataset
+### Step One: Loading the Dataset
 
 # We can read data from the Excel spreadsheet as follows:
-mba <- read_excel("data/mba.xlsx")
-dim(mba)
+mba2 <- read.csv(file = "data/mba2.csv")
+dim(mba2)
 
-# We have 522,064 observations and 7 variables
+# We have 38,765 observations and 3 variables
 
-### Handling missing values ----
+#Step Two: Handling missing values and Data Transformation
 # Are there missing values in the dataset?
-any_na(mba)
+any_na(mba2)
 
-# How many? 135,499 missing values
-n_miss(mba)
-
-# What is the proportion of missing data in the entire dataset?
-prop_miss(mba)
-
-# What is the number and percentage of missing values grouped by
-# each variable?
-miss_var_summary(mba)
-
-# Which variables contain the most missing values?
-gg_miss_var(mba)
-
-# Which combinations of variables are missing together?
-gg_miss_upset(mba)
-
-# Removing the variables with missing values ----
-mba_removed_vars <-
-  mba %>% dplyr::select(-CustomerID)
-
-dim(mba_removed_vars)
-
-# Are there missing values in the dataset?
-any_na(mba_removed_vars)
-
-# What is the number and percentage of missing values grouped by
-# each variable?
-miss_var_summary(mba_removed_vars)
-
-# We now remove the observations that do not have a value for the Itemname
-# variable.
-mba_removed_vars_obs <- mba_removed_vars %>% filter(complete.cases(.))
-
-# We end up with 520,606 observations to create the association rules
-dim(mba_removed_vars_obs)
-
-## Identifying categorical variables ----
-# Ensuring the customer's country is recorded as categorical data
-mba_removed_vars_obs %>% mutate(Country = as.factor(Country))
-
-# Ensuring the Itemname (name of the product purchased) is recorded
-# as categorical data
-mba_removed_vars_obs %>% mutate(Itemname = as.factor(Itemname))
-str(mba_removed_vars_obs)
-
-dim(mba_removed_vars_obs)
-head(mba_removed_vars_obs)
-
-## Record the date and time variables in the correct format by seperating them 
-mba_removed_vars_obs$trans_date <-
-  as.Date(mba_removed_vars_obs$Date)
-
-# Extract time from InvoiceDate and store it in another variable
-mba_removed_vars_obs$trans_time <-
-  format(mba_removed_vars_obs$Date, "%H:%M:%S")
-
-## Record the InvoiceNo in the correct format (numeric) ----
-# Convert InvoiceNo into numeric
-mba_removed_vars_obs$invoice_no <-
-  as.numeric(as.character(mba_removed_vars_obs$BillNo))
-
-# Are there missing values in the dataset?
-any_na(mba_removed_vars_obs)
-
-# What is the number and percentage of missing values grouped by
-# each variable?
-miss_var_summary(mba_removed_vars_obs)
-dim(mba_removed_vars_obs)
-
-# We now remove the observations that do not have a numeric value for the
-# BillNo variable, i.e., the cancelled invoices that did not lead to a
-# complete purchase. There are a total of 9,291 cancelled invoices.
-mba_removed_vars_obs <- mba_removed_vars_obs %>% filter(complete.cases(.))
-
-# This leads to the dataset now having 520,606 observations to use to create the
-# association rules.
-dim(mba_removed_vars_obs)
-
-# We then remove the duplicate variables that we do not need
-# (BillNo and Date) and we also remove all commas to make it easier
-# to identify individual products (some products have commas in their names).
-mba_removed_vars_obs <-
-  mba_removed_vars_obs %>%
-  select(-BillNo,-Date) %>%
-  mutate_all(~str_replace_all(., ",", " "))
-
-# The pre-processed data frame now has 520,606 observations and 7 variables.
-dim(mba_removed_vars_obs)
-View(mba_removed_vars_obs)
-
-# We can save the pre-processing progress made so far
-write.csv(mba_removed_vars_obs,
-          file = "data/mba_data_before_single_transaction_format.csv",
-          row.names = FALSE)
-
-mba_removed_vars_obs <-
-  read.csv(file = "data/mba_data_before_single_transaction_format.csv")
-
-## Create a transaction data frame using the "basket format" ----
-str(mba_removed_vars_obs)
-
-# ddply is used to split a data frame, apply a function to the split data,
-# and then return the result back in a data frame.
-
-transaction_data <-
-  plyr::ddply(mba_removed_vars_obs,
-              c("invoice_no", "trans_date"),
-              function(df1) {
-                paste(df1$Itemname, collapse = ",")
-              }
-  )
-
-View(transaction_data)
-
-## Recording only the `items` variable ----
-transaction_data <-
-  transaction_data %>%
-  dplyr::select("items" = V1)
-#  %>% mutate(items = paste("{", items, "}", sep = ""))
-
-View(transaction_data)
-
-## Save the transactions in CSV format ----
+## Creating a transaction data frame
+transactions <- as(split(data$ItemName, data$MemberNo), "transactions")
+View (transactions)
 
 write.csv(transaction_data,
-          "data/transactions_basket_format_online_mba.csv",
+          "data/transactions_mba2.csv",
           quote = FALSE, row.names = FALSE)
 
+# This shows there are 3,898 transactions that have been identified
+# and 167 items
+print(transactions)
+summary(transactions)
 
-## Read the transactions fromm the CSV file ----
-# We can now, finally, read the basket format transaction data as a
-# transaction object.
 
-tr <-
-  read.transactions("data/transactions_basket_format_online_mba.csv",
-                    format = "basket",
-                    header = TRUE,
-                    rm.duplicates = TRUE,
-                    sep = ","
-  )
-
-# This shows there are 20,205 transactions that have been identified
-# and 8,906 items
-print(tr)
-summary(tr)
-
-# Basic EDA ----
-# Create an item frequency plot for the top 10 items
-itemFrequencyPlot(tr, topN = 10, type = "absolute",
+#Step Three: Basic EDA ----
+## Create an item frequency plot for the top 10 items
+itemFrequencyPlot(transactions, topN = 10, type = "absolute",
                   col = brewer.pal(8, "Pastel2"),
                   main = "Absolute Item Frequency Plot",
                   horiz = TRUE,
                   mai = c(2, 2, 2, 2))
 
-association_rules <- apriori(tr,
-                                       parameter = list(support = 0.01,
-                                                        confidence = 0.8,
-                                                        maxlen = 10))
+association_rules <- apriori(transactions, 
+                             parameter = list(supp = 0.005, conf = 0.8, maxlen = 10))
+
 
 # Print the association rules ----
-# Threshold values of support = 0.01, confidence = 0.8, and
+# Threshold values of support = 0.01, confidence = 0.9, and
 # maxlen = 10 results in a total of 14 rules when using the
 # product name to identify the products.
 summary(association_rules)
 inspect(association_rules)
+
 # To view the top 10 rules
 inspect(association_rules[1:10])
 plot(association_rules)
 
 ### Remove redundant rules ----
 # We can remove the redundant rules as follows:
-subset_rules <-
-  which(colSums(is.subset(association_rules,
-                          association_rules)) > 1)
-length(subset_rules)
-association_rules_no_reps <- association_rules[-subset_rules]
+# Find the subset rules
+subset_rules <- is.subset(association_rules, association_rules)
 
-# This results in 6 non-redundant rules (instead of the initial 8 rules)
+# Get the indices of the subset rules
+subset_rule_indices <- which(subset_rules)
+
+# Remove the subset rules from the association_rules
+association_rules_no_reps <- association_rules[-subset_rule_indices]
+
+# Check the number of remaining rules
+length(association_rules_no_reps)
+
+# This results in 34 non-redundant rules (instead of the initial 35 rules)
 summary(association_rules_no_reps)
 inspect(association_rules_no_reps)
 
