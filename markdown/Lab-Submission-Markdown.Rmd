@@ -17,34 +17,35 @@ editor_options:
 
 # Student Details
 
-+---------------------------------+----------------------------+
-| **Student ID Numbers and Names  | 1.  134644 - C - Sebastian |
-| of Group Members**              |     Muramara               |
-|                                 |                            |
-|                                 | 2.  136675 - C - Bernard   |
-|                                 |     Otieno                 |
-|                                 |                            |
-|                                 | 3.  131589 - C - Agnes     |
-|                                 |     Anyango                |
-|                                 |                            |
-|                                 | 4.  131582 - C - Njeri     |
-|                                 |     Njuguna                |
-|                                 |                            |
-|                                 | 5.  136009 - C- Sera       |
-|                                 |     Ndabari                |
-+---------------------------------+----------------------------+
-| **GitHub Classroom Group Name** | Korn                       |
-+---------------------------------+----------------------------+
-| **Course Code**                 | BBT4206                    |
-+---------------------------------+----------------------------+
-| **Course Name**                 | Business Intelligence II   |
-+---------------------------------+----------------------------+
-| **Program**                     | Bachelor of Business       |
-|                                 | Information Technology     |
-+---------------------------------+----------------------------+
-| **Semester Duration**           | 21^st^ August 2023 to      |
-|                                 | 28^th^ November 2023       |
-+---------------------------------+----------------------------+
++--------------------------------+---------------------------+
+| **Student ID Numbers and Names | 1.  134644 - C -          |
+| of Group Members**             |     Sebastian Muramara    |
+|                                |                           |
+|                                | 2.  136675 - C - Bernard  |
+|                                |     Otieno                |
+|                                |                           |
+|                                | 3.  131589 - C - Agnes    |
+|                                |     Anyango               |
+|                                |                           |
+|                                | 4.  131582 - C - Njeri    |
+|                                |     Njuguna               |
+|                                |                           |
+|                                | 5.  136009 - C- Sera      |
+|                                |     Ndabari               |
++--------------------------------+---------------------------+
+| **GitHub Classroom Group       | Korn                      |
+| Name**                         |                           |
++--------------------------------+---------------------------+
+| **Course Code**                | BBT4206                   |
++--------------------------------+---------------------------+
+| **Course Name**                | Business Intelligence II  |
++--------------------------------+---------------------------+
+| **Program**                    | Bachelor of Business      |
+|                                | Information Technology    |
++--------------------------------+---------------------------+
+| **Semester Duration**          | 21^st^ August 2023 to     |
+|                                | 28^th^ November 2023      |
++--------------------------------+---------------------------+
 
 # Setup Chunk
 
@@ -679,7 +680,7 @@ the following example.
 The pacakges required to perform association rule mining are first
 installed:
 
-```{r Package Installation}
+```{r Association Package Installation}
 ## arules ----
 if (require("arules")) {
   require("arules")
@@ -795,18 +796,16 @@ A data frame with 3,898 transactions and 167 items is created.
 ```{r Data Frame}
 
 transactions <- as(split(data$ItemName, data$MemberNo), "transactions")
-View (transactions)
+View(transactions)
 
-write.csv(transaction_data,
-          "data/transactions_mba2.csv",
-          quote = FALSE, row.names = FALSE)
 ```
 
-##Basic Exploratory Data Analysis 
+##Basic Exploratory Data Analysis
 
-###Item Frequency Plot 
+###Item Frequency Plot
 
-An item frequency plot is created to visualize the occurrence of the top 10 individual items.
+An item frequency plot is created to visualize the occurrence of the top
+10 individual items.
 
 ```{r EDA}
 itemFrequencyPlot(transactions, topN = 10, type = "absolute",
@@ -835,7 +834,7 @@ summary(association_rules)
 inspect(association_rules)
 ```
 
-### Removal of Redundant rules Redundant rules are removed. 
+### Removal of Redundant rules Redundant rules are removed.
 
 This results in 34 rules rather than the inital 35 rules yielded.
 
