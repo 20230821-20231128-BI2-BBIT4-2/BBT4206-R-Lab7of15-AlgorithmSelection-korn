@@ -26,13 +26,22 @@ korn
   - [4.b. SVM Classifier for a classification problem without
     CARET](#4b-svm-classifier-for-a-classification-problem-without-caret)
 - [Linear Regression Algorithms](#linear-regression-algorithms)
+- [CLUSTERING](#clustering)
+  - [Load required Packages](#load-required-packages-1)
+  - [Load the dataset](#load-the-dataset)
+  - [Check for missing data and address
+    it](#check-for-missing-data-and-address-it)
+  - [EDA and feature selection](#eda-and-feature-selection)
+  - [K-Means clustering](#k-means-clustering)
+  - [label each observation with the cluster
+    number](#label-each-observation-with-the-cluster-number)
 
 # Student Details
 
-<table style="width:96%;">
+<table style="width:88%;">
 <colgroup>
-<col style="width: 51%" />
-<col style="width: 44%" />
+<col style="width: 47%" />
+<col style="width: 40%" />
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -293,18 +302,20 @@ print(Type_model_rpart)
     ##       * denotes terminal node
     ## 
     ##  1) root 174 113 2 (0.32 0.35 0.08 0.063 0.046 0.14)  
-    ##    2) Ba< 0.335 151  90 2 (0.36 0.4 0.093 0.066 0.053 0.02)  
-    ##      4) Al< 1.42 94  42 1 (0.55 0.27 0.12 0.011 0.032 0.021)  
-    ##        8) Mg>=3.255 78  27 1 (0.65 0.19 0.14 0 0 0.013)  
-    ##         16) RI>=1.51707 68  19 1 (0.72 0.19 0.074 0 0 0.015)  
-    ##           32) Mg< 3.865 61  13 1 (0.79 0.13 0.066 0 0 0.016) *
-    ##           33) Mg>=3.865 7   2 2 (0.14 0.71 0.14 0 0 0) *
-    ##         17) RI< 1.51707 10   4 3 (0.2 0.2 0.6 0 0 0) *
-    ##        9) Mg< 3.255 16   6 2 (0.062 0.62 0 0.063 0.19 0.062) *
-    ##      5) Al>=1.42 57  21 2 (0.053 0.63 0.053 0.16 0.088 0.018)  
-    ##       10) Mg>=2.26 40   7 2 (0.075 0.82 0.075 0 0.025 0) *
-    ##       11) Mg< 2.26 17   8 5 (0 0.18 0 0.53 0.24 0.059) *
-    ##    3) Ba>=0.335 23   2 7 (0.043 0 0 0.043 0 0.91) *
+    ##    2) Ba< 0.405 151  91 2 (0.37 0.4 0.093 0.066 0.053 0.02)  
+    ##      4) Al< 1.42 91  39 1 (0.57 0.27 0.11 0 0.022 0.022)  
+    ##        8) Ca< 10.48 81  29 1 (0.64 0.2 0.12 0 0.012 0.025)  
+    ##         16) RI>=1.516935 69  20 1 (0.71 0.19 0.087 0 0 0.014)  
+    ##           32) Mg< 3.735 47   8 1 (0.83 0.085 0.064 0 0 0.021) *
+    ##           33) Mg>=3.735 22  12 1 (0.45 0.41 0.14 0 0 0)  
+    ##             66) K< 0.37 13   3 1 (0.77 0 0.23 0 0 0) *
+    ##             67) K>=0.37 9   0 2 (0 1 0 0 0 0) *
+    ##         17) RI< 1.516935 12   8 3 (0.25 0.25 0.33 0 0.083 0.083) *
+    ##        9) Ca>=10.48 10   1 2 (0 0.9 0 0 0.1 0) *
+    ##      5) Al>=1.42 60  25 2 (0.067 0.58 0.067 0.17 0.1 0.017)  
+    ##       10) Mg>=2.26 42   9 2 (0.095 0.79 0.095 0 0.024 0) *
+    ##       11) Mg< 2.26 18   8 5 (0 0.11 0 0.56 0.28 0.056) *
+    ##    3) Ba>=0.405 23   2 7 (0 0.043 0 0.043 0 0.91) *
 
 ``` r
 #### Make predictions ----
@@ -318,12 +329,12 @@ table(predictions,Glass_test$Type)
 
     ##            
     ## predictions  1  2  3  5  6  7
-    ##           1  7  1  1  0  0  0
-    ##           2  6 12  1  0  0  0
-    ##           3  1  1  1  0  0  0
-    ##           5  0  0  0  2  1  0
+    ##           1 10  2  1  0  1  0
+    ##           2  3 11  0  1  0  0
+    ##           3  0  1  2  0  0  0
+    ##           5  0  1  0  1  0  1
     ##           6  0  0  0  0  0  0
-    ##           7  0  1  0  0  0  5
+    ##           7  1  0  0  0  0  4
 
 ``` r
 confusion_matrix <-
@@ -336,35 +347,35 @@ print(confusion_matrix)
     ## 
     ##           Reference
     ## Prediction  1  2  3  5  6  7
-    ##          1  7  1  1  0  0  0
-    ##          2  6 12  1  0  0  0
-    ##          3  1  1  1  0  0  0
-    ##          5  0  0  0  2  1  0
+    ##          1 10  2  1  0  1  0
+    ##          2  3 11  0  1  0  0
+    ##          3  0  1  2  0  0  0
+    ##          5  0  1  0  1  0  1
     ##          6  0  0  0  0  0  0
-    ##          7  0  1  0  0  0  5
+    ##          7  1  0  0  0  0  4
     ## 
     ## Overall Statistics
     ##                                           
-    ##                Accuracy : 0.675           
-    ##                  95% CI : (0.5087, 0.8143)
+    ##                Accuracy : 0.7             
+    ##                  95% CI : (0.5347, 0.8344)
     ##     No Information Rate : 0.375           
-    ##     P-Value [Acc > NIR] : 0.0001152       
+    ##     P-Value [Acc > NIR] : 3.088e-05       
     ##                                           
-    ##                   Kappa : 0.5455          
+    ##                   Kappa : 0.5786          
     ##                                           
     ##  Mcnemar's Test P-Value : NA              
     ## 
     ## Statistics by Class:
     ## 
     ##                      Class: 1 Class: 2 Class: 3 Class: 5 Class: 6 Class: 7
-    ## Sensitivity            0.5000   0.8000   0.3333   1.0000    0.000   1.0000
-    ## Specificity            0.9231   0.7200   0.9459   0.9737    1.000   0.9714
-    ## Pos Pred Value         0.7778   0.6316   0.3333   0.6667      NaN   0.8333
-    ## Neg Pred Value         0.7742   0.8571   0.9459   1.0000    0.975   1.0000
+    ## Sensitivity            0.7143   0.7333   0.6667   0.5000    0.000   0.8000
+    ## Specificity            0.8462   0.8400   0.9730   0.9474    1.000   0.9714
+    ## Pos Pred Value         0.7143   0.7333   0.6667   0.3333      NaN   0.8000
+    ## Neg Pred Value         0.8462   0.8400   0.9730   0.9730    0.975   0.9714
     ## Prevalence             0.3500   0.3750   0.0750   0.0500    0.025   0.1250
-    ## Detection Rate         0.1750   0.3000   0.0250   0.0500    0.000   0.1250
-    ## Detection Prevalence   0.2250   0.4750   0.0750   0.0750    0.000   0.1500
-    ## Balanced Accuracy      0.7115   0.7600   0.6396   0.9868    0.500   0.9857
+    ## Detection Rate         0.2500   0.2750   0.0500   0.0250    0.000   0.1000
+    ## Detection Prevalence   0.3500   0.3750   0.0750   0.0750    0.000   0.1250
+    ## Balanced Accuracy      0.7802   0.7867   0.8198   0.7237    0.500   0.8857
 
 ## 1.b. Decision tree for a classification problem with caret
 
@@ -422,12 +433,12 @@ table(predictions, Glass_test$Type)
 
     ##            
     ## predictions  1  2  3  5  6  7
-    ##           1 19  6  3  0  0  1
-    ##           2  1 15  2  3  2  0
+    ##           1 20  5  5  0  0  0
+    ##           2  0 16  0  3  2  0
     ##           3  0  0  0  0  0  0
     ##           5  0  0  0  0  0  0
     ##           6  0  0  0  0  0  0
-    ##           7  1  1  0  0  0  7
+    ##           7  1  1  0  0  0  8
 
 ``` r
 confusion_matrix <-
@@ -440,35 +451,35 @@ print(confusion_matrix)
     ## 
     ##           Reference
     ## Prediction  1  2  3  5  6  7
-    ##          1 19  6  3  0  0  1
-    ##          2  1 15  2  3  2  0
+    ##          1 20  5  5  0  0  0
+    ##          2  0 16  0  3  2  0
     ##          3  0  0  0  0  0  0
     ##          5  0  0  0  0  0  0
     ##          6  0  0  0  0  0  0
-    ##          7  1  1  0  0  0  7
+    ##          7  1  1  0  0  0  8
     ## 
     ## Overall Statistics
-    ##                                         
-    ##                Accuracy : 0.6721        
-    ##                  95% CI : (0.54, 0.7869)
-    ##     No Information Rate : 0.3607        
-    ##     P-Value [Acc > NIR] : 7.628e-07     
-    ##                                         
-    ##                   Kappa : 0.5185        
-    ##                                         
-    ##  Mcnemar's Test P-Value : NA            
+    ##                                           
+    ##                Accuracy : 0.7213          
+    ##                  95% CI : (0.5917, 0.8285)
+    ##     No Information Rate : 0.3607          
+    ##     P-Value [Acc > NIR] : 1.099e-08       
+    ##                                           
+    ##                   Kappa : 0.5932          
+    ##                                           
+    ##  Mcnemar's Test P-Value : NA              
     ## 
     ## Statistics by Class:
     ## 
     ##                      Class: 1 Class: 2 Class: 3 Class: 5 Class: 6 Class: 7
-    ## Sensitivity            0.9048   0.6818  0.00000  0.00000  0.00000   0.8750
-    ## Specificity            0.7500   0.7949  1.00000  1.00000  1.00000   0.9623
-    ## Pos Pred Value         0.6552   0.6522      NaN      NaN      NaN   0.7778
-    ## Neg Pred Value         0.9375   0.8158  0.91803  0.95082  0.96721   0.9808
+    ## Sensitivity            0.9524   0.7273  0.00000  0.00000  0.00000   1.0000
+    ## Specificity            0.7500   0.8718  1.00000  1.00000  1.00000   0.9623
+    ## Pos Pred Value         0.6667   0.7619      NaN      NaN      NaN   0.8000
+    ## Neg Pred Value         0.9677   0.8500  0.91803  0.95082  0.96721   1.0000
     ## Prevalence             0.3443   0.3607  0.08197  0.04918  0.03279   0.1311
-    ## Detection Rate         0.3115   0.2459  0.00000  0.00000  0.00000   0.1148
-    ## Detection Prevalence   0.4754   0.3770  0.00000  0.00000  0.00000   0.1475
-    ## Balanced Accuracy      0.8274   0.7383  0.50000  0.50000  0.50000   0.9186
+    ## Detection Rate         0.3279   0.2623  0.00000  0.00000  0.00000   0.1311
+    ## Detection Prevalence   0.4918   0.3443  0.00000  0.00000  0.00000   0.1639
+    ## Balanced Accuracy      0.8512   0.7995  0.50000  0.50000  0.50000   0.9811
 
 ## 2.a. Naïve Bayes Classifier for a Classification Problem without CARET
 
@@ -1844,4 +1855,624 @@ table(predictions, data_test$charges)
     ##         neg           0           0
     ##         pos           1           1
 
-\`\`\`
+# CLUSTERING
+
+### Load required Packages
+
+``` r
+## readr ----
+if (require("readr")) {
+  require("readr")
+} else {
+  install.packages("readr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## naniar ----
+if (require("naniar")) {
+  require("naniar")
+} else {
+  install.packages("naniar", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+```
+
+    ## Loading required package: naniar
+
+``` r
+## ggplot2 ----
+if (require("ggplot2")) {
+  require("ggplot2")
+} else {
+  install.packages("ggplot2", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## corrplot ----
+if (require("corrplot")) {
+  require("corrplot")
+} else {
+  install.packages("corrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+```
+
+    ## Loading required package: corrplot
+
+    ## corrplot 0.92 loaded
+
+``` r
+## ggcorrplot ----
+if (require("ggcorrplot")) {
+  require("ggcorrplot")
+} else {
+  install.packages("ggcorrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+```
+
+    ## Loading required package: ggcorrplot
+
+``` r
+## caret ----
+if (require("caret")) {
+  require("caret")
+} else {
+  install.packages("caret", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+
+## dplyr ----
+if (require("dplyr")) {
+  require("dplyr")
+} else {
+  install.packages("dplyr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+```
+
+    ## Loading required package: dplyr
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:MASS':
+    ## 
+    ##     select
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+### Load the dataset
+
+``` r
+air_traffic_usa <-
+  read_csv("../data/air_traffic_passenger_statistics.csv")
+```
+
+    ## Rows: 15007 Columns: 16
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (12): operating_airline, operating_airline_iata_code, published_airline,...
+    ## dbl  (4): activity_period, passenger_count, adjusted_passenger_count, year
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+air_traffic_usa$geo_region <- factor(air_traffic_usa$geo_region)
+
+str(air_traffic_usa)
+```
+
+    ## spc_tbl_ [15,007 × 16] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+    ##  $ activity_period            : num [1:15007] 200507 200507 200507 200507 200507 ...
+    ##  $ operating_airline          : chr [1:15007] "ATA Airlines" "ATA Airlines" "ATA Airlines" "Air Canada" ...
+    ##  $ operating_airline_iata_code: chr [1:15007] "TZ" "TZ" "TZ" "AC" ...
+    ##  $ published_airline          : chr [1:15007] "ATA Airlines" "ATA Airlines" "ATA Airlines" "Air Canada" ...
+    ##  $ published_airline_iata_code: chr [1:15007] "TZ" "TZ" "TZ" "AC" ...
+    ##  $ geo_summary                : chr [1:15007] "Domestic" "Domestic" "Domestic" "International" ...
+    ##  $ geo_region                 : Factor w/ 9 levels "Asia","Australia / Oceania",..: 9 9 9 3 3 1 1 5 5 2 ...
+    ##  $ activity_type_code         : chr [1:15007] "Deplaned" "Enplaned" "Thru / Transit" "Deplaned" ...
+    ##  $ price_category_code        : chr [1:15007] "Low Fare" "Low Fare" "Low Fare" "Other" ...
+    ##  $ terminal                   : chr [1:15007] "Terminal 1" "Terminal 1" "Terminal 1" "Terminal 1" ...
+    ##  $ boarding_area              : chr [1:15007] "B" "B" "B" "B" ...
+    ##  $ passenger_count            : num [1:15007] 27271 29131 5415 35156 34090 ...
+    ##  $ adjusted_activity_type_code: chr [1:15007] "Deplaned" "Enplaned" "Thru / Transit * 2" "Deplaned" ...
+    ##  $ adjusted_passenger_count   : num [1:15007] 27271 29131 10830 35156 34090 ...
+    ##  $ year                       : num [1:15007] 2005 2005 2005 2005 2005 ...
+    ##  $ month                      : chr [1:15007] "July" "July" "July" "July" ...
+    ##  - attr(*, "spec")=
+    ##   .. cols(
+    ##   ..   activity_period = col_double(),
+    ##   ..   operating_airline = col_character(),
+    ##   ..   operating_airline_iata_code = col_character(),
+    ##   ..   published_airline = col_character(),
+    ##   ..   published_airline_iata_code = col_character(),
+    ##   ..   geo_summary = col_character(),
+    ##   ..   geo_region = col_character(),
+    ##   ..   activity_type_code = col_character(),
+    ##   ..   price_category_code = col_character(),
+    ##   ..   terminal = col_character(),
+    ##   ..   boarding_area = col_character(),
+    ##   ..   passenger_count = col_double(),
+    ##   ..   adjusted_activity_type_code = col_character(),
+    ##   ..   adjusted_passenger_count = col_double(),
+    ##   ..   year = col_double(),
+    ##   ..   month = col_character()
+    ##   .. )
+    ##  - attr(*, "problems")=<externalptr>
+
+``` r
+dim(air_traffic_usa)
+```
+
+    ## [1] 15007    16
+
+``` r
+head(air_traffic_usa)
+```
+
+    ## # A tibble: 6 × 16
+    ##   activity_period operating_airline operating_airline_iata_c…¹ published_airline
+    ##             <dbl> <chr>             <chr>                      <chr>            
+    ## 1          200507 ATA Airlines      TZ                         ATA Airlines     
+    ## 2          200507 ATA Airlines      TZ                         ATA Airlines     
+    ## 3          200507 ATA Airlines      TZ                         ATA Airlines     
+    ## 4          200507 Air Canada        AC                         Air Canada       
+    ## 5          200507 Air Canada        AC                         Air Canada       
+    ## 6          200507 Air China         CA                         Air China        
+    ## # ℹ abbreviated name: ¹​operating_airline_iata_code
+    ## # ℹ 12 more variables: published_airline_iata_code <chr>, geo_summary <chr>,
+    ## #   geo_region <fct>, activity_type_code <chr>, price_category_code <chr>,
+    ## #   terminal <chr>, boarding_area <chr>, passenger_count <dbl>,
+    ## #   adjusted_activity_type_code <chr>, adjusted_passenger_count <dbl>,
+    ## #   year <dbl>, month <chr>
+
+``` r
+summary(air_traffic_usa)
+```
+
+    ##  activity_period  operating_airline  operating_airline_iata_code
+    ##  Min.   :200507   Length:15007       Length:15007               
+    ##  1st Qu.:200803   Class :character   Class :character           
+    ##  Median :201011   Mode  :character   Mode  :character           
+    ##  Mean   :201045                                                 
+    ##  3rd Qu.:201308                                                 
+    ##  Max.   :201603                                                 
+    ##                                                                 
+    ##  published_airline  published_airline_iata_code geo_summary       
+    ##  Length:15007       Length:15007                Length:15007      
+    ##  Class :character   Class :character            Class :character  
+    ##  Mode  :character   Mode  :character            Mode  :character  
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                geo_region   activity_type_code price_category_code
+    ##  US                 :5797   Length:15007       Length:15007       
+    ##  Asia               :3273   Class :character   Class :character   
+    ##  Europe             :2089   Mode  :character   Mode  :character   
+    ##  Canada             :1418                                         
+    ##  Mexico             :1115                                         
+    ##  Australia / Oceania: 737                                         
+    ##  (Other)            : 578                                         
+    ##    terminal         boarding_area      passenger_count 
+    ##  Length:15007       Length:15007       Min.   :     1  
+    ##  Class :character   Class :character   1st Qu.:  5374  
+    ##  Mode  :character   Mode  :character   Median :  9210  
+    ##                                        Mean   : 29241  
+    ##                                        3rd Qu.: 21159  
+    ##                                        Max.   :659837  
+    ##                                                        
+    ##  adjusted_activity_type_code adjusted_passenger_count      year     
+    ##  Length:15007                Min.   :     1           Min.   :2005  
+    ##  Class :character            1st Qu.:  5496           1st Qu.:2008  
+    ##  Mode  :character            Median :  9354           Median :2010  
+    ##                              Mean   : 29332           Mean   :2010  
+    ##                              3rd Qu.: 21182           3rd Qu.:2013  
+    ##                              Max.   :659837           Max.   :2016  
+    ##                                                                     
+    ##     month          
+    ##  Length:15007      
+    ##  Class :character  
+    ##  Mode  :character  
+    ##                    
+    ##                    
+    ##                    
+    ## 
+
+### Check for missing data and address it
+
+``` r
+# first check for missing data
+# Are there missing values in the dataset?
+any_na(air_traffic_usa)
+```
+
+    ## [1] TRUE
+
+``` r
+# How many?
+n_miss(air_traffic_usa)
+```
+
+    ## [1] 108
+
+``` r
+# What is the proportion of missing data in the entire dataset?
+prop_miss(air_traffic_usa)
+```
+
+    ## [1] 0.0004497901
+
+``` r
+# What is the number and percentage of missing values grouped by
+# each variable?
+miss_var_summary(air_traffic_usa)
+```
+
+    ## # A tibble: 16 × 3
+    ##    variable                    n_miss pct_miss
+    ##    <chr>                        <int>    <dbl>
+    ##  1 operating_airline_iata_code     54    0.360
+    ##  2 published_airline_iata_code     54    0.360
+    ##  3 activity_period                  0    0    
+    ##  4 operating_airline                0    0    
+    ##  5 published_airline                0    0    
+    ##  6 geo_summary                      0    0    
+    ##  7 geo_region                       0    0    
+    ##  8 activity_type_code               0    0    
+    ##  9 price_category_code              0    0    
+    ## 10 terminal                         0    0    
+    ## 11 boarding_area                    0    0    
+    ## 12 passenger_count                  0    0    
+    ## 13 adjusted_activity_type_code      0    0    
+    ## 14 adjusted_passenger_count         0    0    
+    ## 15 year                             0    0    
+    ## 16 month                            0    0
+
+``` r
+# Which variables contain the most missing values?
+gg_miss_var(air_traffic_usa)
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%203.%20Check%20for%20Missing%20Data%20and%20Address%20it%20-----1.png)<!-- -->
+
+``` r
+# Which combinations of variables are missing together?
+gg_miss_upset(air_traffic_usa)
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%203.%20Check%20for%20Missing%20Data%20and%20Address%20it%20-----2.png)<!-- -->
+
+``` r
+# Where are missing values located (the shaded regions in the plot)?
+vis_miss(air_traffic_usa) +
+  theme(axis.text.x = element_text(angle = 80))
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%203.%20Check%20for%20Missing%20Data%20and%20Address%20it%20-----3.png)<!-- -->
+
+``` r
+# address the issue of missing data
+#option 1: removing observations with missing values
+
+# We can decide to remove all the observations that have missing values
+# as follows:
+air_traffic_usa_removed_obs <- air_traffic_usa %>% filter(complete.cases(.))
+
+# The initial dataset had 21,120 observations and 16 variables
+dim(air_traffic_usa)
+```
+
+    ## [1] 15007    16
+
+``` r
+# The filtered dataset has 16,205 observations and 16 variables
+dim(air_traffic_usa_removed_obs)
+```
+
+    ## [1] 14953    16
+
+``` r
+# Are there missing values in the dataset?
+any_na(air_traffic_usa_removed_obs)
+```
+
+    ## [1] FALSE
+
+``` r
+#option 2: removing variables with missing values
+# Alternatively, we can decide to remove the 2 variables that have missing data
+
+air_traffic_usa_removed_vars <-
+  air_traffic_usa %>%
+  dplyr::select(-operating_airline_iata_code, -published_airline_iata_code)
+
+# The initial dataset had 21,120 observations and 16 variables
+dim(air_traffic_usa)
+```
+
+    ## [1] 15007    16
+
+``` r
+# The filtered dataset has 21,120 observations and 14 variables
+dim(air_traffic_usa_removed_vars)
+```
+
+    ## [1] 15007    14
+
+``` r
+# Are there missing values in the dataset?
+any_na(air_traffic_usa_removed_vars)
+```
+
+    ## [1] FALSE
+
+### EDA and feature selection
+
+``` r
+# Create a correlation matrix
+# Option 1: Basic Table
+cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)]) %>%
+  View()
+
+# Option 2: Basic Plot
+cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)]) %>%
+  corrplot(method = "square")
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%204.%20Perform%20EDA%20and%20Feature%20Selection%20-----1.png)<!-- -->
+
+``` r
+# Option 3: Fancy Plot using ggplot2
+corr_matrix <- cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)])
+
+p <- ggplot2::ggplot(data = reshape2::melt(corr_matrix),
+                     ggplot2::aes(Var1, Var2, fill = value)) +
+  ggplot2::geom_tile() +
+  ggplot2::geom_text(ggplot2::aes(label = label_wrap(label, width = 10)),
+                     size = 4) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE)
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%204.%20Perform%20EDA%20and%20Feature%20Selection%20-----2.png)<!-- -->
+
+``` r
+## Plot the scatter plots ----
+# A scatter plot to show the passenger count against geographical region
+# per price category code
+ggplot(air_traffic_usa_removed_obs,
+       aes(passenger_count, geo_region,
+           color = price_category_code,
+           shape = price_category_code)) +
+  geom_point(alpha = 0.5) +
+  xlab("Passenger Count") +
+  ylab("Geographical Region")
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%204.%20Perform%20EDA%20and%20Feature%20Selection%20-----3.png)<!-- -->
+
+``` r
+## Transform the data ----
+summary(air_traffic_usa_removed_obs)
+```
+
+    ##  activity_period  operating_airline  operating_airline_iata_code
+    ##  Min.   :200507   Length:14953       Length:14953               
+    ##  1st Qu.:200803   Class :character   Class :character           
+    ##  Median :201011   Mode  :character   Mode  :character           
+    ##  Mean   :201045                                                 
+    ##  3rd Qu.:201308                                                 
+    ##  Max.   :201603                                                 
+    ##                                                                 
+    ##  published_airline  published_airline_iata_code geo_summary       
+    ##  Length:14953       Length:14953                Length:14953      
+    ##  Class :character   Class :character            Class :character  
+    ##  Mode  :character   Mode  :character            Mode  :character  
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                geo_region   activity_type_code price_category_code
+    ##  US                 :5757   Length:14953       Length:14953       
+    ##  Asia               :3272   Class :character   Class :character   
+    ##  Europe             :2078   Mode  :character   Mode  :character   
+    ##  Canada             :1418                                         
+    ##  Mexico             :1115                                         
+    ##  Australia / Oceania: 737                                         
+    ##  (Other)            : 576                                         
+    ##    terminal         boarding_area      passenger_count 
+    ##  Length:14953       Length:14953       Min.   :     1  
+    ##  Class :character   Class :character   1st Qu.:  5409  
+    ##  Mode  :character   Mode  :character   Median :  9260  
+    ##                                        Mean   : 29346  
+    ##                                        3rd Qu.: 21222  
+    ##                                        Max.   :659837  
+    ##                                                        
+    ##  adjusted_activity_type_code adjusted_passenger_count      year     
+    ##  Length:14953                Min.   :     1           Min.   :2005  
+    ##  Class :character            1st Qu.:  5523           1st Qu.:2008  
+    ##  Mode  :character            Median :  9418           Median :2010  
+    ##                              Mean   : 29437           Mean   :2010  
+    ##                              3rd Qu.: 21267           3rd Qu.:2013  
+    ##                              Max.   :659837           Max.   :2016  
+    ##                                                                     
+    ##     month          
+    ##  Length:14953      
+    ##  Class :character  
+    ##  Mode  :character  
+    ##                    
+    ##                    
+    ##                    
+    ## 
+
+``` r
+model_of_the_transform <- preProcess(air_traffic_usa_removed_obs,
+                                     method = c("scale", "center"))
+print(model_of_the_transform)
+```
+
+    ## Created from 14953 samples and 16 variables
+    ## 
+    ## Pre-processing:
+    ##   - centered (4)
+    ##   - ignored (12)
+    ##   - scaled (4)
+
+``` r
+air_traffic_usa_removed_obs_std <- predict(model_of_the_transform, # nolint
+                                           air_traffic_usa_removed_obs)
+summary(air_traffic_usa_removed_obs_std)
+```
+
+    ##  activity_period   operating_airline  operating_airline_iata_code
+    ##  Min.   :-1.7138   Length:14953       Length:14953               
+    ##  1st Qu.:-0.7702   Class :character   Class :character           
+    ##  Median :-0.1071   Mode  :character   Mode  :character           
+    ##  Mean   : 0.0000                                                 
+    ##  3rd Qu.: 0.8398                                                 
+    ##  Max.   : 1.7802                                                 
+    ##                                                                  
+    ##  published_airline  published_airline_iata_code geo_summary       
+    ##  Length:14953       Length:14953                Length:14953      
+    ##  Class :character   Class :character            Class :character  
+    ##  Mode  :character   Mode  :character            Mode  :character  
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                                                                   
+    ##                geo_region   activity_type_code price_category_code
+    ##  US                 :5757   Length:14953       Length:14953       
+    ##  Asia               :3272   Class :character   Class :character   
+    ##  Europe             :2078   Mode  :character   Mode  :character   
+    ##  Canada             :1418                                         
+    ##  Mexico             :1115                                         
+    ##  Australia / Oceania: 737                                         
+    ##  (Other)            : 576                                         
+    ##    terminal         boarding_area      passenger_count  
+    ##  Length:14953       Length:14953       Min.   :-0.5025  
+    ##  Class :character   Class :character   1st Qu.:-0.4099  
+    ##  Mode  :character   Mode  :character   Median :-0.3439  
+    ##                                        Mean   : 0.0000  
+    ##                                        3rd Qu.:-0.1391  
+    ##                                        Max.   :10.7964  
+    ##                                                         
+    ##  adjusted_activity_type_code adjusted_passenger_count      year        
+    ##  Length:14953                Min.   :-0.5044          Min.   :-1.7129  
+    ##  Class :character            1st Qu.:-0.4098          1st Qu.:-0.7578  
+    ##  Mode  :character            Median :-0.3430          Median :-0.1211  
+    ##                              Mean   : 0.0000          Mean   : 0.0000  
+    ##                              3rd Qu.:-0.1400          3rd Qu.: 0.8340  
+    ##                              Max.   :10.8014          Max.   : 1.7891  
+    ##                                                                        
+    ##     month          
+    ##  Length:14953      
+    ##  Class :character  
+    ##  Mode  :character  
+    ##                    
+    ##                    
+    ##                    
+    ## 
+
+``` r
+sapply(air_traffic_usa_removed_obs_std[, c(1, 12, 14, 15)], sd)
+```
+
+    ##          activity_period          passenger_count adjusted_passenger_count 
+    ##                        1                        1                        1 
+    ##                     year 
+    ##                        1
+
+``` r
+## Select the features to use to create the clusters ----
+# Use all the numeric variables to create the clusters
+air_traffic_usa_vars <-
+  air_traffic_usa_removed_obs_std[, c(1, 12, 14, 15)]
+```
+
+### K-Means clustering
+
+``` r
+set.seed(7)
+kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = 3, nstart = 20)
+
+# We then decide the maximum number of clusters to investigate
+n_clusters <- 8
+
+# Initialize total within sum of squares error: wss
+wss <- numeric(n_clusters)
+
+set.seed(7)
+
+# Investigate 1 to n possible clusters (where n is the maximum number of 
+# clusters that we want to investigate)
+for (i in 1:n_clusters) {
+  # Use the K Means cluster algorithm to create each cluster
+  kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = i, nstart = 20)
+  # Save the within cluster sum of squares
+  wss[i] <- kmeans_cluster$tot.withinss
+}
+
+## Plot a scree plot ----
+# The scree plot should help you to note when additional clusters do not make
+# any significant difference (the plateau).
+wss_df <- tibble(clusters = 1:n_clusters, wss = wss)
+
+scree_plot <- ggplot(wss_df, aes(x = clusters, y = wss, group = 1)) +
+  geom_point(size = 4) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2, 4, 6, 8)) +
+  xlab("Number of Clusters")
+
+scree_plot
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%205.%20Create%20the%20clusters%20using%20the%20K-Means%20Clustering%20Algorithm%20-----1.png)<!-- -->
+
+``` r
+# We can add guides to make it easier to identify the plateau (or "elbow").
+scree_plot +
+  geom_hline(
+    yintercept = wss,
+    linetype = "dashed",
+    col = c(rep("#000000", 5), "#FF0000", rep("#000000", 2))
+  )
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%205.%20Create%20the%20clusters%20using%20the%20K-Means%20Clustering%20Algorithm%20-----2.png)<!-- -->
+
+``` r
+# The plateau is reached at 6 clusters.
+# We therefore create the final cluster with 6 clusters
+# (not the initial 3 used at the beginning of this STEP.)
+k <- 6
+set.seed(7)
+# Build model with k clusters: kmeans_cluster
+kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = k, nstart = 20)
+```
+
+### label each observation with the cluster number
+
+``` r
+air_traffic_usa_removed_obs$cluster_id <- factor(kmeans_cluster$cluster)
+
+## View the results by plotting scatter plots with the labelled cluster ----
+ggplot(air_traffic_usa_removed_obs, aes(passenger_count, geo_region,
+                                         color = cluster_id)) +
+  geom_point(alpha = 0.5) +
+  xlab("Passenger Count") +
+  ylab("Geographical Region")
+```
+
+![](Lab-Submission-Markdown_files/figure-gfm/#%20STEP%206.%20Add%20the%20cluster%20number%20as%20a%20label%20for%20each%20observation%20-----1.png)<!-- -->
