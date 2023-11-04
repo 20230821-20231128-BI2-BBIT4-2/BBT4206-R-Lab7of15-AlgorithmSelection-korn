@@ -518,6 +518,241 @@ print(predictions)
 #### Display the model's evaluation metrics ----
 table(predictions, data_test$charges)
 
+######ALGORITHM SELECTION FOR CLUSTERING######
+# STEP 1. Install and Load the Required Packages ----
+## readr ----
+if (require("readr")) {
+  require("readr")
+} else {
+  install.packages("readr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## naniar ----
+if (require("naniar")) {
+  require("naniar")
+} else {
+  install.packages("naniar", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## ggplot2 ----
+if (require("ggplot2")) {
+  require("ggplot2")
+} else {
+  install.packages("ggplot2", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## corrplot ----
+if (require("corrplot")) {
+  require("corrplot")
+} else {
+  install.packages("corrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## ggcorrplot ----
+if (require("ggcorrplot")) {
+  require("ggcorrplot")
+} else {
+  install.packages("ggcorrplot", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+## caret ----
+if (require("caret")) {
+  require("caret")
+} else {
+  install.packages("caret", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+
+## dplyr ----
+if (require("dplyr")) {
+  require("dplyr")
+} else {
+  install.packages("dplyr", dependencies = TRUE,
+                   repos = "https://cloud.r-project.org")
+}
+
+# STEP 2. Load the Dataset ----
+air_traffic_usa <-
+  read_csv("data/air_traffic_passenger_statistics.csv")
+
+air_traffic_usa$geo_region <- factor(air_traffic_usa$geo_region)
+
+str(air_traffic_usa)
+dim(air_traffic_usa)
+head(air_traffic_usa)
+summary(air_traffic_usa)
+
+# STEP 3. Check for Missing Data and Address it ----
+# Are there missing values in the dataset?
+any_na(air_traffic_usa)
+
+# How many?
+n_miss(air_traffic_usa)
+
+# What is the proportion of missing data in the entire dataset?
+prop_miss(air_traffic_usa)
+
+# What is the number and percentage of missing values grouped by
+# each variable?
+miss_var_summary(air_traffic_usa)
+
+# Which variables contain the most missing values?
+gg_miss_var(air_traffic_usa)
+
+# Which combinations of variables are missing together?
+gg_miss_upset(air_traffic_usa)
+
+# Where are missing values located (the shaded regions in the plot)?
+vis_miss(air_traffic_usa) +
+  theme(axis.text.x = element_text(angle = 80))
+
+## OPTION 1: Remove the observations with missing values ----
+# We can decide to remove all the observations that have missing values
+# as follows:
+air_traffic_usa_removed_obs <- air_traffic_usa %>% filter(complete.cases(.))
+
+# The initial dataset had 21,120 observations and 16 variables
+dim(air_traffic_usa)
+
+# The filtered dataset has 16,205 observations and 16 variables
+dim(air_traffic_usa_removed_obs)
+
+# Are there missing values in the dataset?
+any_na(air_traffic_usa_removed_obs)
+
+## Option 2: Remove the variables with missing values ----
+# Alternatively, we can decide to remove the 2 variables that have missing data
+air_traffic_usa_removed_vars <-
+  air_traffic_usa %>%
+  dplyr::select(-operating_airline_iata_code, -published_airline_iata_code)
+
+# The initial dataset had 21,120 observations and 16 variables
+dim(air_traffic_usa)
+
+# The filtered dataset has 21,120 observations and 14 variables
+dim(air_traffic_usa_removed_vars)
+
+# Are there missing values in the dataset?
+any_na(air_traffic_usa_removed_vars)
+
+# STEP 4. Perform EDA and Feature Selection ----
+## Compute the correlations between variables ----
+# Create a correlation matrix
+# Option 1: Basic Table
+cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)]) %>%
+  View()
+
+# Option 2: Basic Plot
+cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)]) %>%
+  corrplot(method = "square")
+
+# Option 3: Fancy Plot using ggplot2
+corr_matrix <- cor(air_traffic_usa_removed_obs[, c(1, 12, 14, 15)])
+
+p <- ggplot2::ggplot(data = reshape2::melt(corr_matrix),
+                     ggplot2::aes(Var1, Var2, fill = value)) +
+  ggplot2::geom_tile() +
+  ggplot2::geom_text(ggplot2::aes(label = label_wrap(label, width = 10)),
+                     size = 4) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE)
+
+## Plot the scatter plots ----
+# A scatter plot to show the passenger count against geographical region
+# per price category code
+ggplot(air_traffic_usa_removed_obs,
+       aes(passenger_count, geo_region,
+           color = price_category_code,
+           shape = price_category_code)) +
+  geom_point(alpha = 0.5) +
+  xlab("Passenger Count") +
+  ylab("Geographical Region")
+
+## Transform the data ----
+summary(air_traffic_usa_removed_obs)
+model_of_the_transform <- preProcess(air_traffic_usa_removed_obs,
+                                     method = c("scale", "center"))
+print(model_of_the_transform)
+air_traffic_usa_removed_obs_std <- predict(model_of_the_transform, # nolint
+                                           air_traffic_usa_removed_obs)
+summary(air_traffic_usa_removed_obs_std)
+sapply(air_traffic_usa_removed_obs_std[, c(1, 12, 14, 15)], sd)
+
+## Select the features to use to create the clusters ----
+# Use all the numeric variables to create the clusters
+air_traffic_usa_vars <-
+  air_traffic_usa_removed_obs_std[, c(1, 12, 14, 15)]
+
+# STEP 5. Create the clusters using the K-Means Clustering Algorithm ----
+set.seed(7)
+kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = 3, nstart = 20)
+
+# We then decide the maximum number of clusters to investigate
+n_clusters <- 8
+
+# Initialize total within sum of squares error: wss
+wss <- numeric(n_clusters)
+
+set.seed(7)
+
+# Investigate 1 to n possible clusters (where n is the maximum number of 
+# clusters that we want to investigate)
+for (i in 1:n_clusters) {
+  # Use the K Means cluster algorithm to create each cluster
+  kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = i, nstart = 20)
+  # Save the within cluster sum of squares
+  wss[i] <- kmeans_cluster$tot.withinss
+}
+
+## Plot a scree plot ----
+# The scree plot should help you to note when additional clusters do not make
+# any significant difference (the plateau).
+wss_df <- tibble(clusters = 1:n_clusters, wss = wss)
+
+scree_plot <- ggplot(wss_df, aes(x = clusters, y = wss, group = 1)) +
+  geom_point(size = 4) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2, 4, 6, 8)) +
+  xlab("Number of Clusters")
+
+scree_plot
+
+# We can add guides to make it easier to identify the plateau (or "elbow").
+scree_plot +
+  geom_hline(
+    yintercept = wss,
+    linetype = "dashed",
+    col = c(rep("#000000", 5), "#FF0000", rep("#000000", 2))
+  )
+
+# The plateau is reached at 6 clusters.
+# We therefore create the final cluster with 6 clusters
+# (not the initial 3 used at the beginning of this STEP.)
+k <- 6
+set.seed(7)
+# Build model with k clusters: kmeans_cluster
+kmeans_cluster <- kmeans(air_traffic_usa_vars, centers = k, nstart = 20)
+
+# STEP 6. Add the cluster number as a label for each observation ----
+air_traffic_usa_removed_obs$cluster_id <- factor(kmeans_cluster$cluster)
+
+## View the results by plotting scatter plots with the labelled cluster ----
+ggplot(air_traffic_usa_removed_obs, aes(passenger_count, geo_region,
+                                         color = cluster_id)) +
+  geom_point(alpha = 0.5) +
+  xlab("Passenger Count") +
+  ylab("Geographical Region")
+
+
+
 ##############
 #LAB 7c
 #ASSOCIATION RULE MINING USING APRIORI
